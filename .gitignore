@@ -1,6 +1,3 @@
 /.pytest_cache
 /.venv
-/test_comprar_banner_home.py
-/test_logar_falha.py
-/test_logar_sucesso.py
 /__pycache__
