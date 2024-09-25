@@ -10,7 +10,7 @@ class TestCadastrarUsuario:
         self.driver = webdriver.Edge()
         self.driver.implicitly_wait(10)
         
-        # Foi preciso colocar um tamanho fixo, pois aparecia um pop-up de notificação
+        # Foi preciso colocar um tamanho fixo, pois aparecia um pop-up de notificação e não conseguia clicar no perfil
         self.driver.set_window_size(1360, 720)
 
         
