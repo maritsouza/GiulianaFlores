@@ -32,22 +32,23 @@ Feature: Site Giuliana Flores
         Then aparece a mensagem de erro ATENÇÃO - e-mail ou senha inválidos!
 
     Scenario Outline: Compra a partir do banner da home
+        Given que faço login com email mayaanaribeiro@pozzer.net e senha cM30MTn1nL
         When clico na primeira promoção do banner 
         Then aparece para preencher o cep
-        When preencho com o cep 05766270, clico no endereço e em aplicar
-        Then sou direcionado para página do OUTUBRO ROSA
-        When clico no produto "Dupla de Ilustre Mini Orquídea Phalaenopsis Salmão" do id "32414"
+        When preencho com o cep <cep>, clico no endereço e em aplicar
+        Then sou direcionado para página do <promocao_banner>
+        When clico no produto <nome_produto> do id <id_produto>
         Then sou direcionado para página de detalhes do produto
-        And verifico se o nome do produto é "Dupla de Ilustre Mini Orquídea Phalaenopsis Salmão" e o preço é "R$ R$ 139,90"
+        And verifico se o nome do produto é <nome_produto> e o preço é <preco_produto>
         And verifico a quantidade do produto antes de adicionar ao carrinho
         When clico em ADICIONAR AO CARRINHO
         Then verifico se sou direcionado para a interface de selecionar a data e o período de entrega
-        When seleciono a data de entrega para 31/10/2024 e o período para Comercial
+        When seleciono a data de entrega para <dia_entrega> e o período para Comercial
         And clico em OK
         Then sou direcionado para o Meu Carrinho
-        And verifico se é produto "Dupla de Ilustre Mini Orquídea Phalaenopsis Salmão" se o preço é "R$ R$ 139,90"
-        And verifico se a quantidade é 1, o valor do frete é "R$ 15,90" e o valor total é "R$ 155,80"
-        When clico em continuar
+        And verifico se é produto <nome_produto> se o preço é <preco_produto>
+        And verifico se a quantidade é 1, o valor do frete é <frete> e o valor total é <valor_total>
+        When clico em continuar do meu carrinho
         Then sou direcionado para a página de Entrega 01
         When preencho os campos de entrega com <nome>, <telefone>, <numero>, <tipo_endereco>, <whatsapp>
         And clico em Não quero cartão
@@ -58,8 +59,9 @@ Feature: Site Giuliana Flores
         Then sou direcionado para a página de confirmação de compra
 
         Examples:
-        | nome                            | telefone    | numero | tipo_endereco | whatsapp    |
-        | Luciana Benedita Renata Lima    | 81983159224 | 864    | Residencial   | 81983159224 |
+        
+        | nome                            | telefone    | numero | tipo_endereco | whatsapp    | cep      | promocao_banner  | nome_produto                  | id_produto | preco_produto | dia_entrega | frete    | valor_total |
+        | Luciana Benedita Renata Lima    | 81983159224 | 864    | Residencial   | 81983159224 | 54410395 | OUTUBRO ROSA     | Buquê de 42 Rosas Cor de Rosa | 26100      | R$ 359,90     | 15          | R$ 15,90 | R$ 375,80   |
         
 
 

@@ -87,6 +87,14 @@ def step_impl(context, mensagem):
     
 
 # Fluxo de Compra
+@given(u'que faço login com email {email} e senha {senha}')
+def step_impl(context, email, senha):
+    context.driver.find_element(By.ID, "perfil-hidden").click()
+    context.driver.find_element(By.ID, "UrlLogin").click()
+    context.driver.find_element(By.ID, "ContentSite_txtEmail").send_keys(email)
+    context.driver.find_element(By.ID, "ContentSite_txtPassword").send_keys(senha)
+    context.driver.find_element(By.ID, "ContentSite_ibtContinue").click()
+
 @then(u'aparece para preencher o cep')
 def step_impl(context):
     context.driver.find_element(By.CSS_SELECTOR, "#boxAddress > .opt-popup-title").text == "Para onde deseja enviar?"
@@ -106,64 +114,68 @@ def step_impl(context):
 def step_impl(context, promocao_banner):
     assert context.driver.find_element(By.ID, "title-defaut").text == promocao_banner
 
-@when(u'clico no produto "{nome_produto}" do id "{id_produto}"')
+@when(u'clico no produto {nome_produto} do id {id_produto}')
 def step_impl(context, nome_produto, id_produto):
     assert context.driver.find_element(By.CSS_SELECTOR, f"a[data-idproduct='{id_produto}'] h2.title-item").text == nome_produto
     context.driver.find_element(By.CSS_SELECTOR, f"a[data-idproduct='{id_produto}'] .image-content").click()
     
 @then(u'sou direcionado para página de detalhes do produto')
 def step_impl(context):
-    
+    assert context.driver.current_url == "https://www.giulianaflores.com.br/buque-de-42-rosas-cor-de-rosa/p26100/?src=outubroros"    
 
-
-@then(u'verifico se o nome do produto é "Buquê de 42 Rosas Cor de Rosa" e o preço é "R$ 359,90"')
-def step_impl(context):
-    raise NotImplementedError(u'STEP: Then verifico se o nome do produto é "Buquê de 42 Rosas Cor de Rosa" e o preço é "R$ 359,90"')
-
+@then(u'verifico se o nome do produto é {nome_produto} e o preço é {preco_produto}')
+def step_impl(context, nome_produto, preco_produto):
+    assert context.driver.find_element(By.ID, "ContentSite_lblProductDsName").text == nome_produto.upper()
+    assert context.driver.find_element(By.CSS_SELECTOR, ".precoPor_prod").text == preco_produto
 
 @then(u'verifico a quantidade do produto antes de adicionar ao carrinho')
 def step_impl(context):
-    raise NotImplementedError(u'STEP: Then verifico a quantidade do produto antes de adicionar ao carrinho')
-
+    assert context.driver.find_element(By.ID, "ContentSite_txtQtdBy").get_attribute("value") == "1"
 
 @when(u'clico em ADICIONAR AO CARRINHO')
 def step_impl(context):
-    raise NotImplementedError(u'STEP: When clico em ADICIONAR AO CARRINHO')
-
+    context.driver.find_element(By.ID, "ContentSite_divBtBuy").click()
 
 @then(u'verifico se sou direcionado para a interface de selecionar a data e o período de entrega')
 def step_impl(context):
-    raise NotImplementedError(u'STEP: Then verifico se sou direcionado para a interface de selecionar a data e o período de entrega')
+    assert context.driver.find_element(By.CSS_SELECTOR, ".title-carrinho-produto").text == "SELECIONE A DATA E O PERÍODO DE ENTREGA"        
 
-
-@when(u'seleciono a data de entrega para 31/10/2024 e o período para Comercial')
-def step_impl(context):
-    raise NotImplementedError(u'STEP: When seleciono a data de entrega para 31/10/2024 e o período para Comercial')
-
+@when(u'seleciono a data de entrega para {dia_entrega} e o período para Comercial')
+def step_impl(context, dia_entrega):
+    context.driver.find_element(By.LINK_TEXT, dia_entrega).click()
+    context.driver.find_element(By.CSS_SELECTOR, "[idperiod='100']").click()   
 
 @when(u'clico em OK')
 def step_impl(context):
-    raise NotImplementedError(u'STEP: When clico em OK')
-
+    context.driver.find_element(By.ID, "btConfirmShippingData").click()
 
 @then(u'sou direcionado para o Meu Carrinho')
 def step_impl(context):
-    raise NotImplementedError(u'STEP: Then sou direcionado para o Meu Carrinho')
+    # Precisei colocar as duas formas de verificar o título, pois o site as vezes muda o texto
+    assert context.driver.find_element(By.CSS_SELECTOR, "#title-defaut > h1").text == "MEU CARRINHO" or \
+            context.driver.find_element(By.CSS_SELECTOR, "#title-defaut > h1").text == "Meu Carrinho"
+
+@then(u'verifico se é produto {nome_produto} se o preço é {preco_produto}')
+def step_impl(context, nome_produto, preco_produto):
+    assert context.driver.find_element(By.CSS_SELECTOR, ".prodBasket_nome").text == nome_produto
+    assert context.driver.find_element(By.CSS_SELECTOR, ".precoPor_basket").text == preco_produto
+
+@then(u'verifico se a quantidade é 1, o valor do frete é {frete} e o valor total é {valor_total}')
+def step_impl(context, frete, valor_total):
+    assert context.driver.find_element(By.ID, "ContentSite_Basketcontrol1_rptBasket_rptBasketItems_0_nuQty_0").get_attribute("value") == "1"
+    assert context.driver.find_element(By.CSS_SELECTOR, ".fretepago").text == frete
+    assert context.driver.find_element(By.CSS_SELECTOR, ".total-linha-calculado span.valor-total-carrinho").text == valor_total
 
 
-@then(u'verifico se é produto "Buquê de 42 Rosas Cor de Rosa" se o preço é "R$ 359,90"')
+@when(u'clico em continuar do meu carrinho')
 def step_impl(context):
-    raise NotImplementedError(u'STEP: Then verifico se é produto "Buquê de 42 Rosas Cor de Rosa" se o preço é "R$ 359,90"')
-
-
-@then(u'verifico se a quantidade é 1, o valor do frete é "R$ 15,90" e o valor total é "R$ 375,80"')
-def step_impl(context):
-    raise NotImplementedError(u'STEP: Then verifico se a quantidade é 1, o valor do frete é "R$ 15,90" e o valor total é "R$ 375,80"')
-
+    context.driver.find_element(By.ID, "ContentSite_Basketcontrol1_rptBasket_imbFinalize_0").click()
 
 @then(u'sou direcionado para a página de Entrega 01')
 def step_impl(context):
-    raise NotImplementedError(u'STEP: Then sou direcionado para a página de Entrega 01')
+    assert context.driver.find_element(By.ID, "ContentSite_rptDestination_TituloCarrinho_0").text == "ENTREGA"
+    context.driver.quit()   
+
 
 
 @when(u'preencho os campos de entrega com Luciana Benedita Renata Lima, 81983159224, 864, Residencial, 81983159224')
