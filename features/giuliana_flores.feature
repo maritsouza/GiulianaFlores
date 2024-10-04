@@ -50,18 +50,16 @@ Feature: Site Giuliana Flores
         And verifico se a quantidade é 1, o valor do frete é <frete> e o valor total é <valor_total>
         When clico em continuar do meu carrinho
         Then sou direcionado para a página de Entrega 01
-        When preencho os campos de entrega com <nome>, <telefone>, <numero>, <tipo_endereco>, <whatsapp>
-        And clico em Não quero cartão
-        And clico em continuar
+        When preencho os campos de entrega com <nome>, <telefone>, <numero>, <whatsapp>
+        And clico em Não quero cartão e em continuar
         Then sou direcionado para a página de pagamento
-        When escolho a opção de pagamento com PIX
-        And clico em CONCLUIR COMPRA
+        When escolho a opção de pagamento com PIX e clico em CONCLUIR COMPRA
         Then sou direcionado para a página de confirmação de compra
 
         Examples:
         
-        | nome                            | telefone    | numero | tipo_endereco | whatsapp    | cep      | promocao_banner  | nome_produto                  | id_produto | preco_produto | dia_entrega | frete    | valor_total |
-        | Luciana Benedita Renata Lima    | 81983159224 | 864    | Residencial   | 81983159224 | 54410395 | OUTUBRO ROSA     | Buquê de 42 Rosas Cor de Rosa | 26100      | R$ 359,90     | 15          | R$ 15,90 | R$ 375,80   |
+        | nome                            | telefone    | numero |  whatsapp    | cep      | promocao_banner  | nome_produto                  | id_produto | preco_produto | dia_entrega | frete    | valor_total |
+        | Luciana Benedita Renata Lima    | 81983159224 | 864    |  81983159224 | 54410395 | OUTUBRO ROSA     | Buquê de 42 Rosas Cor de Rosa | 26100      | R$ 359,90     | 15          | R$ 15,90 | R$ 375,80   |
         
 
 

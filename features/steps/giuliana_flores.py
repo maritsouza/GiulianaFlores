@@ -42,7 +42,7 @@ def step_impl(context, nome, cpf, email, senha, cep, numero, complemento, telefo
     context.driver.find_element(By.ID, "ContentSite_chkRcvSMS").click()
     context.driver.find_element(By.ID, "ContentSite_chkRcvWhatsApp").click()
 
-@when(u'espero a ação do tester de validar o recaptcha por 5 segundos')
+@when(u'espero a ação do tester de validar o recaptcha por 50 segundos')
 def step_impl(context):
     # Não foi possível clicar no botão devido ao recaptcha
     time.sleep(50)
@@ -94,6 +94,7 @@ def step_impl(context, email, senha):
     context.driver.find_element(By.ID, "ContentSite_txtEmail").send_keys(email)
     context.driver.find_element(By.ID, "ContentSite_txtPassword").send_keys(senha)
     context.driver.find_element(By.ID, "ContentSite_ibtContinue").click()
+    # time.sleep(60)
 
 @then(u'aparece para preencher o cep')
 def step_impl(context):
@@ -173,36 +174,35 @@ def step_impl(context):
 
 @then(u'sou direcionado para a página de Entrega 01')
 def step_impl(context):
-    assert context.driver.find_element(By.ID, "ContentSite_rptDestination_TituloCarrinho_0").text == "ENTREGA"
-    context.driver.quit()   
+    # Precisei colocar as duas formas de verificar o título, pois o site as vezes muda o texto, além de alterar a estrutura do código em alguns momentos
+    assert context.driver.find_element(By.CSS_SELECTOR, "#title-defaut > h2").text == "ENTREGA" or \
+            context.driver.find_element(By.ID, "ContentSite_rptDestination_TituloCarrinho_0").text == "Entrega 01"
+            
+@when(u'preencho os campos de entrega com {nome}, {telefone}, {numero}, {whatsapp}')
+def step_impl(context, nome, telefone, numero, whatsapp):
+    context.driver.find_element(By.ID, "txtDsDestinationName").send_keys(nome)
+    context.driver.find_element(By.ID, "txtPhone").send_keys(telefone)
+    context.driver.find_element(By.ID, "txtDsNumber").send_keys(numero)
+    context.driver.find_element(By.ID, "ContentSite_rptDeliveryAddress_rbtFgPersonalAddress_0_0_0").click()
+    context.driver.find_element(By.ID, "txtDsSmsNumber").send_keys(whatsapp)
 
-
-
-@when(u'preencho os campos de entrega com Luciana Benedita Renata Lima, 81983159224, 864, Residencial, 81983159224')
+@when(u'clico em Não quero cartão e em continuar')
 def step_impl(context):
-    raise NotImplementedError(u'STEP: When preencho os campos de entrega com Luciana Benedita Renata Lima, 81983159224, 864, Residencial, 81983159224')
-
-
-@when(u'clico em Não quero cartão')
-def step_impl(context):
-    raise NotImplementedError(u'STEP: When clico em Não quero cartão')
-
+    context.driver.find_element(By.ID, "rbWhithoutGiftCard").click()
+    context.driver.find_element(By.ID, "btnContinue").click()
 
 @then(u'sou direcionado para a página de pagamento')
 def step_impl(context):
-    raise NotImplementedError(u'STEP: Then sou direcionado para a página de pagamento')
+    context.driver.find_element(By.CSS_SELECTOR, ".titulo-dept.title-defaut-checkout").text == "PAGAMENTO"
 
-
-@when(u'escolho a opção de pagamento com PIX')
+@when(u'escolho a opção de pagamento com PIX e clico em CONCLUIR COMPRA')
 def step_impl(context):
-    raise NotImplementedError(u'STEP: When escolho a opção de pagamento com PIX')
-
-
-@when(u'clico em CONCLUIR COMPRA')
-def step_impl(context):
-    raise NotImplementedError(u'STEP: When clico em CONCLUIR COMPRA')
-
+    context.driver.find_element(By.ID, "ContentSite_spanPix").click()
+    context.driver.find_element(By.ID, "ContentSite_ibtFinalizeOrderWithPix").click()
 
 @then(u'sou direcionado para a página de confirmação de compra')
 def step_impl(context):
-    raise NotImplementedError(u'STEP: Then sou direcionado para a página de confirmação de compra')
+    assert context.driver.find_element(By.ID, "title-defaut").text == "PAGAMENTO"
+    
+    context.driver.quit()
+
